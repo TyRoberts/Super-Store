@@ -75,135 +75,180 @@ ADD PRIMARY KEY(address_id),
 ADD FOREIGN KEY (customer_id) REFERENCES customers (customer_id);
 
 
-/*There were a number of alterations made to product id's because in the original data a single id 
-referenced multiple products.*/
-UPDATE original
-SET product_id = 'FUR-FU-10004271'
-WHERE product_name = 'Executive Impressions 13" Clairmont Wall Clock';
-
-UPDATE original
-SET product_id = 'FUR-FU-10004849'
-WHERE product_name = 'DAX Solid Wood Frames';
-
-UPDATE original
-SET product_id = 'OFF-ST-10001229'
-WHERE product_name = 'Fellowes Personal Hanging Folder Files, Navy';
-
-UPDATE original
-SET product_id = 'OFF-ST-10004951'
-WHERE product_name = 'Acco Perma 3000 Stacking Storage Drawers';
-
-UPDATE original
-SET product_id = 'TEC-AC-10003833'
-WHERE product_name = 'Logitech P710e Mobile Speakerphone';
-
-UPDATE original
-SET product_id = 'OFF-PA-10002196'
-WHERE product_name = 'Xerox 1966';
-
-UPDATE original
-SET product_id = 'TEC-PH-10004532'
-WHERE product_name = 'AT&T CL2909';
-
-UPDATE original
-SET product_id = 'TEC-PH-10001531'
-WHERE product_name = 'Plantronics Voyager Pro Legend';
-
-UPDATE original
-SET product_id = 'TEC-PH-10001796'
-WHERE product_name = 'RCA H5401RE1 DECT 6.0 4-Line Cordless Handset With Caller ID/Call Waiting';
-
-UPDATE original
-SET product_id = 'TEC-MA-10001149'
-WHERE product_name = 'Okidata MB491 Multifunction Printer';
-
-UPDATE original
-SET product_id = 'TEC-PH-10002311'
-WHERE product_name = 'Panasonic KX T7731-B Digital phone';
-
-UPDATE original
-SET product_id = 'TEC-PH-10002201'
-WHERE product_name = 'Samsung Galaxy Note 2';
-
-UPDATE original
-SET product_id = 'OFF-PA-10001971'
-WHERE product_name = 'Xerox 1908';
-
-UPDATE original
-SET product_id = 'TEC-AC-10002050'
-WHERE product_name = 'Logitech G19 Programmable Gaming Keyboard';
-
-UPDATE original
-SET product_id = 'OFF-AR-10001150'
-WHERE product_name = 'Sanford Colorific Colored Pencils, 12/Box';
-
-UPDATE original
-SET product_id = 'OFF-PA-10000478'
-WHERE product_name = 'Xerox 22';
-
-UPDATE original
-SET product_id = 'OFF-BI-10002027'
-WHERE product_name = 'Avery Arch Ring Binders';
-
-UPDATE original
-SET product_id = 'FUR-CH-10001147'
-WHERE product_name = 'Global Task Chair, Black';
-
-UPDATE original
-SET product_id = 'OFF-PA-10000660'
-WHERE product_name = 'Adams Phone Message Book, Professional, 400 Message Capacity, 5 3/6” x 11”';
-
-UPDATE original
-SET product_id = 'OFF-PA-10001167'
-WHERE product_name = 'Xerox 1932';
-
-UPDATE original
-SET product_id = 'FUR-FU-10001474'
-WHERE product_name = 'DAX Wood Document Frame';
-
-UPDATE original
-SET product_id = 'FUR-FU-10004016'
-WHERE product_name = 'Executive Impressions 13" Chairman Wall Clock';
-
-UPDATE original
-SET product_id = 'OFF-PA-10002378'
-WHERE product_name = 'Xerox 1916';
-
-UPDATE original
-SET product_id = 'TEC-AC-10002551'
-WHERE product_name = 'Maxell 4.7GB DVD-RW 3/Pack';
-
-UPDATE original
-SET product_id = 'OFF-BI-10004655'
-WHERE product_name = 'VariCap6 Expandable Binder';
-
-UPDATE original
-SET product_id = 'OFF-BI-10004633'
-WHERE product_name = 'GBC Binding covers';
+/*There were 33 alterations made to product id's because in the original dataset a single id 
+referenced multiple products. I assigned one of the products to the next sequential id if available.*/
+SELECT DISTINCT product_id, product_name
+FROM original 
+WHERE product_id IN (
+	SELECT 
+		product_id
+	FROM
+		original
+	GROUP BY 
+		product_id
+	HAVING 
+		COUNT(DISTINCT product_name) > 1)
+ORDER BY product_id;
 
 UPDATE original
 SET product_id = 'FUR-BO-10002214'
-WHERE product_name = 'DMI Eclipse Executive Suite Bookcases';
+WHERE product_name = 'DMI Eclipse Executive Suite Bookcases'
+AND 'FUR-BO-10002214' NOT IN (SELECT DISTINCT product_id FROM original);
 
 UPDATE original
-SET product_id = 'OFF-PA-10000358'
-WHERE product_name = 'Xerox 1888';
+SET product_id = 'FUR-CH-10001147'
+WHERE product_name = 'Global Task Chair, Black'
+AND 'FUR-CH-10001147' NOT IN (SELECT DISTINCT product_id FROM original);
 
 UPDATE original
-SET product_id = 'OFF-PA-10003023'
-WHERE product_name = 'Xerox 1992';
+SET product_id = 'FUR-FU-10001474'
+WHERE product_name = 'DAX Wood Document Frame'
+AND 'FUR-FU-10001474' NOT IN (SELECT DISTINCT product_id FROM original);
 
 UPDATE original
-SET product_id = 'OFF-AP-10000577'
-WHERE product_name = 'Belkin 7 Outlet SurgeMaster II';
-
-UPDATE original
-SET product_id = 'FUR-FU-10004865'
-WHERE product_name = 'Eldon 500 Class Desk Accessories';
+SET product_id = 'FUR-FU-10004016'
+WHERE product_name = 'Executive Impressions 13" Chairman Wall Clock'
+AND 'FUR-FU-10004016' NOT IN (SELECT DISTINCT product_id FROM original);
 
 UPDATE original
 SET product_id = 'FUR-FU-10004092'
-WHERE product_name = 'Eldon 200 Class Desk Accessories, Black';
+WHERE product_name = 'Eldon 200 Class Desk Accessories, Black'
+AND 'FUR-FU-10004092' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'FUR-FU-10004271'
+WHERE product_name = 'Executive Impressions 13" Clairmont Wall Clock'
+AND 'FUR-FU-10004271' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'FUR-FU-10004849'
+WHERE product_name = 'DAX Solid Wood Frames'
+AND 'FUR-FU-10004849' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'FUR-FU-10004865'
+WHERE product_name = 'Eldon 500 Class Desk Accessories'
+AND 'FUR-FU-10004865' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-AP-10000577'
+WHERE product_name = 'Belkin 7 Outlet SurgeMaster II'
+AND 'OFF-AP-10000577' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-AR-10001150'
+WHERE product_name = 'Sanford Colorific Colored Pencils, 12/Box'
+AND 'OFF-AR-10001150' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-BI-10002027'
+WHERE product_name = 'Avery Arch Ring Binders'
+AND 'OFF-BI-10002027' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-BI-10004633'
+WHERE product_name = 'GBC Binding covers'
+AND 'OFF-BI-10004633' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-BI-10004655'
+WHERE product_name = 'VariCap6 Expandable Binder'
+AND 'OFF-BI-10004655' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10000358'
+WHERE product_name = 'Xerox 1888'
+AND 'OFF-PA-10000358' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10000478'
+WHERE product_name = 'Xerox 22'
+AND 'OFF-PA-10000478' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10000660'
+WHERE product_name = 'Adams Phone Message Book, Professional, 400 Message Capacity, 5 3/6” x 11”'
+AND 'OFF-PA-10000660' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10001167'
+WHERE product_name = 'Xerox 1932'
+AND 'OFF-PA-10001167' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10001971'
+WHERE product_name = 'Xerox 1908'
+AND 'OFF-PA-10001971' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10002196'
+WHERE product_name = 'Xerox 1966'
+AND 'OFF-PA-10002196' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10002378'
+WHERE product_name = 'Xerox 1916'
+AND 'OFF-PA-10002378' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-PA-10003023'
+WHERE product_name = 'Xerox 1992'
+AND 'OFF-PA-10003023' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-ST-10001229'
+WHERE product_name = 'Fellowes Personal Hanging Folder Files, Navy'
+AND 'OFF-ST-10001229' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'OFF-ST-10004951'
+WHERE product_name = 'Acco Perma 3000 Stacking Storage Drawers'
+AND 'OFF-ST-10004951' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-AC-10002050'
+WHERE product_name = 'Logitech G19 Programmable Gaming Keyboard'
+AND 'TEC-AC-10002050' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-AC-10002551'
+WHERE product_name = 'Maxell 4.7GB DVD-RW 3/Pack'
+AND 'TEC-AC-10002551' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-AC-10003833'
+WHERE product_name = 'Logitech P710e Mobile Speakerphone'
+AND 'TEC-AC-10003833' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-MA-10001149'
+WHERE product_name = 'Okidata MB491 Multifunction Printer'
+AND 'TEC-MA-10001149' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-PH-10001531'
+WHERE product_name = 'Plantronics Voyager Pro Legend'
+AND 'TEC-PH-10001531' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-PH-10001796'
+WHERE product_name = 'RCA H5401RE1 DECT 6.0 4-Line Cordless Handset With Caller ID/Call Waiting'
+AND 'TEC-PH-10001796' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-PH-10002201'
+WHERE product_name = 'Samsung Galaxy Note 2'
+AND 'TEC-PH-10002201' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-PH-10002311'
+WHERE product_name = 'Panasonic KX T7731-B Digital phone'
+AND 'TEC-PH-10002311' NOT IN (SELECT DISTINCT product_id FROM original);
+
+UPDATE original
+SET product_id = 'TEC-PH-10004532'
+WHERE product_name = 'AT&T CL2909'
+AND 'TEC-PH-10004532' NOT IN (SELECT DISTINCT product_id FROM original);
 
 /*There are two products in the dataset with the same name, they have the same sales price but a 
 different cost basis. In the original dataset they are considered seperate products so I chose to keep
@@ -212,7 +257,8 @@ UPDATE original
 SET product_id = 'FUR-FU-10000175'
 WHERE product_name = 'DAX Wood Document Frame' 
 AND 
-CAST((sales - profit)/quantity AS decimal(6,2))=9.47;
+CAST((sales - profit)/quantity AS decimal(6,2))=9.47
+AND 'FUR-FU-10000175' NOT IN (SELECT DISTINCT product_id FROM original);
 
 /* The original data only has sales (revenue), quantity, discount and profit. The sales value
 is after the discount is applied so the discount has to be removed to find the actual price of the product.*/  
@@ -270,50 +316,3 @@ ALTER TABLE order_items
 ADD PRIMARY KEY (row_id),
 ADD FOREIGN KEY (order_id) REFERENCES orders (order_id),
 ADD FOREIGN KEY (product_id) REFERENCES products (product_id);
-
-
-/*Reconstruction of original dataset as proof of accuracy. There was some slight variance
-due to rounding in order to display price and cost as normal two precision decimal types.
-See variance file for more information.*/
-SELECT 
-	row_id,
-	o.order_id,
-	order_date,
-	ship_date,
-	ship_mode,
-	"c".customer_id,
-	customer_name,
-	segment,
-	country,
-	city,
-	"state",
-	postal_code,
-	region,
-	"p".product_id,
-	category,
-	sub_category,
-	product_name,
-	(price * quantity) * (1-discount) AS sales,
-	quantity,
-	discount,
-	((price * (1 - discount)) - "cost") * quantity AS profit
-FROM 
-	order_items oi
-INNER JOIN
-	orders o
-	ON
-	oi.order_id = o.order_id
-INNER JOIN
-	products "p"
-	ON
-	oi.product_id = "p".product_id
-INNER JOIN
-	customers "c"
-	ON
-	o.customer_id = "c".customer_id
-INNER JOIN 
-	address "a"
-	ON
-	o.address_id = "a".address_id
-ORDER BY 
-	row_id;
