@@ -98,3 +98,6 @@ INNER JOIN
 	norm n
 	ON
 	o.row_id = n.row_id;
+
+/*After variance check there was no need for the original dataset, it was dropped.*/
+DROP TABLE original;
