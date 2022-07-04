@@ -317,7 +317,3 @@ INNER JOIN
 	o.address_id = "a".address_id
 ORDER BY 
 	row_id;
-
-
-/*With all information successfully extracted from the original dataset it was dropped.*/
-DROP TABLE original;
