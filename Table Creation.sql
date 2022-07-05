@@ -52,7 +52,13 @@ WHERE postal_code IS NULL;
 
 CREATE TABLE IF NOT EXISTS address AS
 SELECT 
-	customer_id ||'-'|| ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY postal_code) AS address_id,
+	CASE WHEN region = 'Central' THEN '67-' --The first part of the address id is the ASCII code for the first 
+	WHEN region = 'East' THEN '69-' 		--character of that region (i.e. ASCII code for C is 67 so Central = 67). 
+	WHEN region = 'South' THEN '83-'		
+	WHEN region = 'West' THEN '87-' END
+	||customer_id 
+	||'-'
+	|| ROW_NUMBER() OVER(PARTITION BY region,customer_id ORDER BY postal_code) AS address_id,
 	customer_id, 
 	city, 
 	"state",

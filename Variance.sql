@@ -1,5 +1,5 @@
 /*Reconstruction of original dataset as proof of accuracy. There was some slight variance
-due to rounding in order to display price and cost in a normal two decimal fashion.
+due to rounding done to display price and cost in a normal two decimal fashion.
 Given the variance the trade-off was accepatable. See variance below.*/
 SELECT 
 	row_id,
@@ -7,7 +7,7 @@ SELECT
 	order_date,
 	ship_date,
 	ship_mode,
-	"c".customer_id,
+	cu.customer_id,
 	customer_name,
 	segment,
 	country,
@@ -15,7 +15,7 @@ SELECT
 	"state",
 	postal_code,
 	region,
-	"p".product_id,
+	pr.product_id,
 	category,
 	sub_category,
 	product_name,
@@ -30,17 +30,17 @@ INNER JOIN
 	ON
 	oi.order_id = o.order_id
 INNER JOIN
-	products "p"
+	products pr 
 	ON
-	oi.product_id = "p".product_id
+	oi.product_id = pr.product_id
 INNER JOIN
-	customers "c"
+	customers cu
 	ON
-	o.customer_id = "c".customer_id
+	o.customer_id = cu.customer_id
 INNER JOIN 
-	address "a"
+	address ad
 	ON
-	o.address_id = "a".address_id
+	o.address_id = ad.address_id
 ORDER BY 
 	row_id;
 
@@ -48,8 +48,7 @@ ORDER BY
 /*Average variance of profit = -.0010*/
 WITH norm AS(SELECT 
 	row_id,
-	(price * quantity) * (1-discount) AS sales,
-	((price * (1 - discount)) - "cost") * quantity AS profit
+	(((price * (1 - discount)) - "cost") * quantity) AS profit
 FROM 
 	order_items oi
 INNER JOIN
@@ -57,9 +56,9 @@ INNER JOIN
 	ON
 	oi.order_id = o.order_id
 INNER JOIN
-	products "p"
+	products pr
 	ON
-	oi.product_id = "p".product_id)
+	oi.product_id = pr.product_id)
 	
 SELECT
 	AVG(o.profit - n.profit)
@@ -74,8 +73,7 @@ INNER JOIN
 /*No Variance for sales.*/
 WITH norm AS(SELECT 
 	row_id,
-	(price * quantity) * (1-discount) AS sales,
-	((price * (1 - discount)) - "cost") * quantity AS profit
+	(price * quantity) * (1-discount) AS sales
 FROM 
 	order_items oi
 INNER JOIN
