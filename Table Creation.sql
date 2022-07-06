@@ -83,8 +83,11 @@ ADD FOREIGN KEY (customer_id) REFERENCES customers (customer_id);
 
 /*There were 33 alterations made to product id's because in the original dataset a single id 
 referenced multiple products. I assigned one of the products to the next sequential id if available.*/
-SELECT DISTINCT product_id, product_name
-FROM original 
+SELECT DISTINCT 
+	product_id, 
+	product_name
+FROM 
+	original 
 WHERE product_id IN (
 	SELECT 
 		product_id
@@ -266,7 +269,7 @@ AND
 CAST((sales - profit)/quantity AS decimal(6,2))=9.47
 AND 'FUR-FU-10000175' NOT IN (SELECT DISTINCT product_id FROM original);
 
-/* The original data only has sales (revenue), quantity, discount and profit. The sales value
+/* The original data only has sales, quantity, discount and profit. The sales value
 is after the discount is applied so the discount has to be removed to find the actual price of the product.*/  
 CREATE TABLE IF NOT EXISTS products AS
 SELECT 
