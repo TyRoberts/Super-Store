@@ -7,7 +7,7 @@ FROM crosstab(
 	$$ SELECT
 		DATE_TRUNC('month', order_date) AS "month",
 		category,
-		TO_CHAR(SUM((price * quantity) * (1-discount)), 'L999G999')  AS sales
+		TO_CHAR(SUM(((price * (1 - discount)) - "cost") * quantity), 'L999G999') AS profit
 	FROM
 		order_items
 	INNER JOIN
@@ -29,11 +29,11 @@ FROM crosstab(
 		('Furniture'::text),
 		('Office Supplies'::text),
 		('Technology'::text)$$ 
-) AS ct (
+) AS profit (
 		"month" timestamp with time zone,
 		"Furniture" text, 
 		"Office Supplies" text, 
 		"Technology" text
 			)
 ORDER BY 
-	ct."month";
+	profit."month";

@@ -1,7 +1,7 @@
 SELECT
 	"state" AS "State",
 	region AS "Region",
-	TO_CHAR(SUM(((price * (1 - discount)) - "cost") * quantity), 'L999G999PR') AS "Profit"
+	TO_CHAR(SUM(((price * (1 - discount)) - "cost") * quantity), 'L999G999') AS "Profit"
 FROM
 	order_items oi
 INNER JOIN

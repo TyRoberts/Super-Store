@@ -8,7 +8,7 @@ FROM crosstab(
 	$$ SELECT 
 		sub_category,
 		region,
-		TO_CHAR(SUM((price * quantity) * (1 - discount)), 'L999G999') AS sales
+		TO_CHAR(SUM(((price * (1 - discount)) - "cost") * quantity), 'L999G999') AS profit
 	FROM
 		order_items
 	INNER JOIN
@@ -34,7 +34,7 @@ FROM crosstab(
 		('East'::text),
 		('South'::text),
 		('West'::text) $$
-) AS ct (
+) AS profit (
 		"Sub-Category" text,
 		"Central" text,
 		"East" text,

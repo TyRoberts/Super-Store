@@ -34,7 +34,7 @@ FROM crosstab(
 		('East'::text),
 		('South'::text),
 		('West'::text) $$
-) AS ct (
+) AS discount (
 		"Sub-Category" text,
 		"Central" text,
 		"East" text,

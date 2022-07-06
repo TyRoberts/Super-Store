@@ -18,7 +18,7 @@ FROM crosstab(
 		products 
 		ON
 		order_items.product_id = products.product_id
-	WHERE address_id LIKE '69-%' --69 represents East region
+	WHERE address_id LIKE '67-%' --67 represents Central region
 	GROUP BY 
 		"month",
 		category 
@@ -29,11 +29,11 @@ FROM crosstab(
 		('Furniture'::text),
 		('Office Supplies'::text),
 		('Technology'::text)$$ 
-) AS ct (
+) AS discount (
 		"month" timestamp with time zone,
 		"Furniture" text, 
 		"Office Supplies" text, 
 		"Technology" text
 			)
 ORDER BY 
-	ct."month";
+	discount."month";

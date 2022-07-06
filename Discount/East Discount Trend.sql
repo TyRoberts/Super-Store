@@ -7,7 +7,7 @@ FROM crosstab(
 	$$ SELECT
 		DATE_TRUNC('month', order_date) AS "month",
 		category,
-		TO_CHAR(SUM((price * quantity) * (1-discount)), 'L999G999')  AS sales
+		TO_CHAR(SUM(price * discount* quantity), 'L999G999') AS discount
 	FROM
 		order_items
 	INNER JOIN
@@ -18,7 +18,7 @@ FROM crosstab(
 		products 
 		ON
 		order_items.product_id = products.product_id
-	WHERE address_id LIKE '87-%' --87 represents West region
+	WHERE address_id LIKE '69-%' --69 represents East region
 	GROUP BY 
 		"month",
 		category 
@@ -29,11 +29,11 @@ FROM crosstab(
 		('Furniture'::text),
 		('Office Supplies'::text),
 		('Technology'::text)$$ 
-) AS ct (
+) AS discount (
 		"month" timestamp with time zone,
 		"Furniture" text, 
 		"Office Supplies" text, 
 		"Technology" text
 			)
 ORDER BY 
-	ct."month";
+	discount."month";

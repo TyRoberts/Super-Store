@@ -1,15 +1,15 @@
 SELECT 
-	category,
+	category AS "Category",
 	"Central",
 	"East",
 	"South",
 	"West"
 FROM crosstab(
 	$$ SELECT
-		CASE WHEN category IS NULL THEN 'Total'
+		CASE WHEN category IS NULL THEN '*Total'
 		ELSE category END,
 		region,
-		TO_CHAR(SUM(price * discount * quantity), 'L999G999') AS discount
+		TO_CHAR(SUM(((price * (1 - discount)) - "cost") * quantity), 'L999G999') AS profit
 	FROM
 		order_items oi
 	INNER JOIN
@@ -35,7 +35,7 @@ FROM crosstab(
 		('East'::text),
 		('South'::text),
 		('West'::text) $$
-) AS ct (
+) AS profit (
 		"category" text,
 		"Central" text,
 		"East" text,
